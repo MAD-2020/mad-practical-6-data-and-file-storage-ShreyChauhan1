@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -52,14 +53,20 @@ public class Main4Activity extends AppCompatActivity {
 
             @Override
             public void onTick(long millisUntilFinished) {
-                Log.v(TAG, "CountDown Start!" + millisUntilFinished / 1000);
-                Toast
-                        .makeText(
-                                getApplicationContext(),
-                                String.valueOf(millisUntilFinished / 1000),
-                                Toast.LENGTH_SHORT
-                        )
-                        .show();
+                StringBuilder timer = new StringBuilder(20);
+                timer.append("Game starts in: ").append(millisUntilFinished / 1000);
+                final Toast toast = Toast.makeText(getApplicationContext(),
+                        timer,
+                        Toast.LENGTH_SHORT);
+
+                toast.show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        toast.cancel();
+                    }
+                }, 1000);
             }
 
             @Override
@@ -167,6 +174,7 @@ public class Main4Activity extends AppCompatActivity {
                             if (flag) {
                                 doCheck(button);
                             }
+                            setNewMole();
 
 
                         }
@@ -181,7 +189,7 @@ public class Main4Activity extends AppCompatActivity {
                 updateUserScore();
 
                 Intent intent = new Intent(Main4Activity.this, Main3Activity.class);
-                intent.putExtra("User", userData.toString());
+                intent.putExtra("User", userData);
                 startActivity(intent);
             }
         });
@@ -222,14 +230,16 @@ public class Main4Activity extends AppCompatActivity {
     public void setNewMole()
     {
         Random ran = new Random();
+        int randomLocation = ran.nextInt(9);
+
+        mole1 = findViewById(BUTTON_IDS[randomLocation]);
         mole1.setText("*");
 
-        int randomLocation = ran.nextInt(9);
 
 
         int location;
 
-        mole1 = findViewById(BUTTON_IDS[randomLocation]);
+
 
 
 

@@ -51,7 +51,7 @@ public class CustomScoreAdaptor extends RecyclerView.Adapter<CustomScoreViewHold
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, Main4Activity.class);
-                intent.putExtra("User", userData.toString());
+                intent.putExtra("User", userData);
                 intent.putExtra("level", userData.getLevels().get(position));
                 context.startActivity(intent);
             }

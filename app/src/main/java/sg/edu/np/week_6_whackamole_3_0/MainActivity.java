@@ -56,7 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.v(TAG, FILENAME + ": Logging in with: " + name + ": " + pass);
                     Intent intent = new Intent(MainActivity.this , Main3Activity.class);
-                    intent.putExtra("User", userData.toString());
+                    intent.putExtra("User", userData
+                    );
                     startActivity(intent);
 
                 }else{

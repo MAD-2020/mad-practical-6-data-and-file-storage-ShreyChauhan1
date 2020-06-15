@@ -29,6 +29,7 @@ public class Main2Activity extends AppCompatActivity {
     private static final String FILENAME = "Main2Activity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
 
+
     EditText username , password;
     Button create , cancel;
 
