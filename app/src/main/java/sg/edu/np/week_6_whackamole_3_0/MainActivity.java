@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +20,9 @@ public class MainActivity extends AppCompatActivity {
            accordingly via Toastbox if user does not exist. This loads the level selection page.
         4. There is an option to create a new user account. This loads the create user page.
      */
+    EditText username , password;
+    Button login;
+    TextView register;
     private static final String FILENAME = "MainActivity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
 
@@ -28,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        username = findViewById( R.id.username);
+        password = findViewById( R.id.password);
+        login = findViewById( R.id.create);
+        register = findViewById( R.id.register);
         /* Hint:
             This method creates the necessary login inputs and the new user creation ontouch.
             It also does the checks on button selected.
@@ -38,7 +43,36 @@ public class MainActivity extends AppCompatActivity {
             Log.v(TAG, FILENAME + ": Invalid user!");
 
         */
+        login.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String name = username.getText().toString();
+                String pass = password.getText().toString();
+                if (!isValidUser(name , pass)) {
+                    Log.v(TAG, FILENAME + ": Valid User! Logging in");
 
+                    MyDBHandler myDBHandler = new MyDBHandler(MainActivity.this);
+                    UserData userData = myDBHandler.findUser(name);
+
+                    Log.v(TAG, FILENAME + ": Logging in with: " + name + ": " + pass);
+                    Intent intent = new Intent(MainActivity.this , Main3Activity.class);
+                    intent.putExtra("User", userData.toString());
+                    startActivity(intent);
+
+                }else{
+                    Log.v(TAG, FILENAME + ": Invalid user!");
+                    Toast.makeText(MainActivity.this , "Invalid Username and Password" , Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        register.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, FILENAME + ": Create new user!");
+                Intent create = new Intent(MainActivity.this, Main2Activity.class);
+                startActivity(create);
+            }
+        });
 
     }
 
@@ -54,6 +88,16 @@ public class MainActivity extends AppCompatActivity {
             Log.v(TAG, FILENAME + ": Running Checks..." + dbData.getMyUserName() + ": " + dbData.getMyPassword() +" <--> "+ userName + " " + password);
             You may choose to use this or modify to suit your design.
          */
+        MyDBHandler myDBHandler = new MyDBHandler(MainActivity.this);
+        UserData userData = myDBHandler.findUser(userName);
+
+        if (userData == null) {
+            return true;
+        }else {
+            Log.v(TAG, FILENAME + ": Running Checks..." + userData.getMyUserName() + ": " + userData.getMyPassword() +" <--> "+ userName + " " + password);
+            return false;
+        }
+
 
     }
 

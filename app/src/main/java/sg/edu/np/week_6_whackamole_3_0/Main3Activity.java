@@ -25,13 +25,38 @@ public class Main3Activity extends AppCompatActivity {
             e. Each location of the mole is randomised.
         5. There is an option return to the login page.
      */
+    Button back;
+
     private static final String FILENAME = "Main3Activity.java";
     private static final String TAG = "Whack-A-Mole3.0!";
+    RecyclerView recyclerView;
+    CustomScoreAdaptor customScoreAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
+        back = findViewById(R.id.login);
+        UserData userData = (UserData) getIntent().getSerializableExtra("User");
+        Log.v(TAG, FILENAME + ": Show level for User: "+ userData.getMyUserName());
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        customScoreAdaptor = new CustomScoreAdaptor(this, userData);
+        recyclerView.setAdapter(customScoreAdaptor);
+
+
+
+        back.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Main3Activity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
         /* Hint:
         This method receives the username account data and looks up the database for find the
         corresponding information to display in the recyclerView for the level selections page.
